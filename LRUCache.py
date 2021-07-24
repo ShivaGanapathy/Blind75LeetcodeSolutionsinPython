@@ -1,88 +1,73 @@
 class Node:
-    
     def __init__(self,key,value):
         self.key = key
         self.value = value
         self.next = None
         self.prev = None
         
-    def setNext(self,next):
-        self.next = next
-        
-    def setPrev(self,prev):
-        self.prev = prev
-        
+    def setNext(self,nextNode):
+        self.next = nextNode
+    def setPrev(self,prevNode):
+        self.prev = prevNode
     def setValue(self,value):
         self.value = value
-        
-        
-class LRUCache:
 
+class LRUCache:
     def __init__(self, capacity: int):
         self.capacity = capacity
-        self.size = 0
         self.cache = {}
-        self.head = Node(None,None)
-        self.tail = Node(self.head,None)
+        self.size = 0
+        self.head = Node(-1,-1)
+        self.tail = Node(-1,-1)
         self.head.setNext(self.tail)
+        self.head.setPrev(self.head)
         
+    def deleteNode(self,curNode):
+        prevNode = curNode.prev
+        nextNode = curNode.next
+        prevNode.next = nextNode
+        nextNode.prev = prevNode
+        self.size-=1
+    
+    def insertNode(self,curNode):
+        nextNode = self.head.next
+        self.head.next = curNode
+        curNode.prev = self.head
+        curNode.next = nextNode
+        nextNode.prev = curNode
+        self.size+=1
+        
+    
 
-    def get(self, key: int) -> int:
+    def get(self, key: int):
         if key in self.cache:
-            #deletes node from current place in list
             curNode = self.cache[key][1]
-            prevNode = curNode.prev
-            nextNode = curNode.next
-            prevNode.next = nextNode
-            nextNode.prev = prevNode
-            
-            #inserts node at head
-            nextNode = self.head.next
-            self.head.setNext(curNode)
-            curNode.setPrev(self.head)
-            curNode.setNext(nextNode)
-            nextNode.setPrev(curNode)
-            
+            self.deleteNode(curNode)
+            self.insertNode(curNode)
             return self.cache[key][0]
-            
         else:
             return -1
         
 
     def put(self, key: int, value: int) -> None:
-        if key not in self.cache:
-            nextNode = self.head.next
-            curNode = Node(key,value)
-            self.head.setNext(curNode)
-            curNode.setPrev(self.head)
-            curNode.setNext(nextNode)
-            nextNode.setPrev(curNode)
-            self.cache[key] = (value,curNode)
-            self.size += 1
-        
-        else:
+        if key in self.cache:
+            #push the key node to the head
             curNode = self.cache[key][1]
-            curNode.setValue(value)
-            prevNode = curNode.prev
-            nextNode = curNode.next
-            prevNode.next = nextNode
-            nextNode.prev = prevNode
+            self.deleteNode(curNode)
+            self.insertNode(curNode)
+            #update value at index key
+            self.cache[key][0] = value
             
-            nextNode = self.head.next
-            self.head.setNext(curNode)
-            curNode.setPrev(self.head)
-            curNode.setNext(nextNode)
-            nextNode.setPrev(curNode)
-            self.cache[key] = (value,curNode)
+        else:
+            curNode = Node(key,value)
+            self.insertNode(curNode)
+            self.cache[key] = [value,curNode]
             
             
-        
-        
         if self.size > self.capacity:
+            #get rid of lru
             lruNode = self.tail.prev
-            lruNode.prev.setNext(self.tail)
-            self.tail.setPrev(lruNode.prev)
+            self.deleteNode(lruNode)
             del self.cache[lruNode.key]
-            self.size -=1 
-            
         
+
