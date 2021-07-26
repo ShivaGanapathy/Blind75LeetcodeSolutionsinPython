@@ -1,37 +1,42 @@
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
         """
-        
-        Three solutions:
-        - Sort and return
-        - Use a Heap
-        - Quickselect
-        
+        Solution 1: Sort and Index
+        Time Complexity: O(nlogn)
+        Space Complexity: O(1)
         """
+
+        nums.sort(reverse=True)
+        return nums[k-1]
+
+
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """
+        Solution 2: Use a Min Heap with K elements
+        Time Complexity: O(nlogk)
+        Space Complexity: O(n)
+        """
+
+        from heapq import heapify, heappop as pop, heappush as push, heappushpop as pushpop
+        minHeap = []
+        heapify(minHeap)
         
-        #Solution #1: Sort
-        # nums.sort(reverse=True)
-        # return nums[k-1]
-        
-        
-        #Solution #2: Use a Min Heap
-#         from heapq import heapify,heappop as pop,heappush as push
-#         from heapq import heappushpop as pushpop
-        
-#         minHeap = []
-#         heapify(minHeap)
-        
-#         for i in range(len(nums)):
-#             item = nums[i]
-#             if i+1 > k:
-#                 pushpop(minHeap,item)
-#             else:
-#                 push(minHeap,item)
+        for i in range(len(nums)):
+            item = nums[i]
+            if i+1 > k:
+                pushpop(minHeap,item)
+            else:
+                push(minHeap,item)
                 
-#         return pop(minHeap)
+        return pop(minHeap)
     
         
-        #Solution #3 Using the quickselect algorithm
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """
+        Solution 3: Use Quickselect algorithm
+        Time Complexity: O(n)
+        Space Complexity: O(n)
+        """
         pivot = random.choice(nums)
         left = [x for x in nums if x > pivot]
         mid = [x for x in nums if x==pivot]
