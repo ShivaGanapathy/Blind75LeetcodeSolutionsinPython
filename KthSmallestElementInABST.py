@@ -12,6 +12,9 @@ class Solution:
             if not root:
                 return
             
+            if len(output) == k:
+                return
+            
             dfs(root.left)
             output.append(root.val)
             dfs(root.right)
