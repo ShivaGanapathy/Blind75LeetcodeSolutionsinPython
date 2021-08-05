@@ -5,8 +5,25 @@ class Solution:
         visited = set()
         islands = 0 
         
-        for row in grid:
-            print(row)
+        #Recursive DFS
+        def dfs(r,c):
+            visited.add((r,c))
+            directions = [(1,0),(0,-1),(-1,0),(0,1)]
+            for direction in directions:
+                    x = r + direction[0]
+                    y = c + direction[1]
+                    
+                    is_valid_x = 0 <= x < rows
+                    is_valid_y = 0 <= y < cols
+                    
+                    is_land = False
+                    if is_valid_x and is_valid_y:
+                        is_land = grid[x][y] == "1"
+                    
+                    is_not_visited = (x,y) not in visited
+                    
+                    if is_not_visited and is_land:
+                        dfs(x,y)
             
         
         def bfs(r,c):
