@@ -24,7 +24,6 @@ class Solution:
                     
                     if is_not_visited and is_land:
                         dfs(x,y)
-            
         
         def bfs(r,c):
             q = collections.deque()
