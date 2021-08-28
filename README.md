@@ -1,4 +1,2 @@
-# Blind75LeetcodeSolutionsinPython
-This repository contains solutions to Leetcode questions coded in python.
-
-
+# Leetcode Solutions
+Here's a repository of every leetcode problem I have completed in the past!
