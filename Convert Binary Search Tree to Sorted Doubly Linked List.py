@@ -6,7 +6,7 @@ class Solution:
     
     def dfs(self, node):
         if node:
-            self.inorder(node.left)
+            self.dfs(node.left)
         	
             if self.first is None: 
                 self.first = node
@@ -15,7 +15,7 @@ class Solution:
                 node.left = self.prev
             self.prev = node
                       
-            self.inorder(node.right)
+            self.dfs(node.right)
     
     def treeToDoublyList(self, root):
         if not root: 
