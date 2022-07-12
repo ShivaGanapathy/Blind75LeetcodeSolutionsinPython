@@ -6,8 +6,8 @@ class Solution:
             if currentSum == target:
                 return left+1,right+1
             elif currentSum > target:
-                right -=1
+                right -= 1
             else:
-                left +=1
+                left += 1
             
         
